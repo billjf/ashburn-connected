@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TGDW61X353"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-TGDW61X353');
+</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Ashburn Connected</title>
+
+  <link rel="stylesheet" href="styles.css?v=20260926-1">
+</head>
+
+<body>
+
+  <!-- ========================================
+       SITE HEADER
+       ======================================== -->
+
+  <header class="site-header">
+
+    <div class="header-banner">
+
+      <!-- Header background -->
+      <img
+        src="images/white brick.jpg"
+        alt=""
+        class="header-bg"
+      >
+
+      <div class="header-overlay">
+
+        <!-- LEFT BRANDING -->
+        <div class="header-left">
+
+          <img
+            src="images/ashburn_circular_tree_logo.png"
+            alt="Ashburn Connected logo"
+            class="header-logo"
+          >
+
+          <div class="header-divider"></div>
+
+          <div class="header-brand-text">
+
+            <div class="header-title">
+              <span class="title-ashburn">Ashburn</span>
+              <span class="title-connected">Connected</span>
+            </div>
+
+            <div class="header-tagline">
+              Discover Ashburn, better.
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- RIGHT BRANDING -->
+        <div class="header-right">
+
+          <div class="header-slogan">
+            Local Places. Real Connections.
+          </div>
+
+          <div class="header-community">
+            ASHBURN &nbsp; | &nbsp; IAD &nbsp; | &nbsp; COMMUNITY
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================================
+         MAIN NAVIGATION
+         ======================================== -->
+
+    <nav class="main-nav">
+
+      <button class="nav-button active">
+        🏠 Home
+      </button>
+
+      <button
+        id="toggle-breweries"
+        class="nav-button active">
+        🍺 Breweries
+      </button>
+
+      <button
+        id="toggle-ev"
+        class="nav-button active">
+        ⚡ EV Chargers
+      </button>
+
+      <button
+        id="toggle-iad"
+        class="nav-button active">
+        ✈ IAD & Travel
+      </button>
+
+      <button
+        id="toggle-iad-beer"
+        class="nav-button active">
+        🍺✈ Airport Beer
+      </button>
+
+      <button
+        id="toggle-coffee"
+        class="nav-button active">
+        ☕ Coffee & Wi-Fi
+      </button>
+
+      <button id="restaurantsBtn" class="nav-button">
+      🍽 Restaurants
+      </button>
+
+      <button class="nav-button">
+        📍 More
+      </button>
+
+      <a
+        href="about.html"
+        class="nav-button">
+
+        <img
+          src="images/about_icon.png"
+          class="nav-icon"
+          alt=""
+        >
+
+        About
+
+      </a>
+
+    </nav>
+
+  </header>
+
+
+
+  <!-- ========================================
+     MAIN CONTENT
+     ======================================== -->
+
+<div class="virginia-background">
+
+  <main class="layout">
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+
+      <h2 id="sidebar-title">
+        Top Breweries Near Ashburn
+      </h2>
+
+      <div id="brewery-list"></div>
+
+      <div
+        id="coffee-list"
+        style="display: none;">
+      </div>
+
+      <div
+    id="restaurant-list"
+    style="display: none;">
+  </div>
+
+    </aside>
+
+    <!-- GOOGLE MAP -->
+    <div id="map"></div>
+
+  </main>
+
+
+  <!-- ========================================
+       LOCAL REVIEWS
+       ======================================== -->
+
+  <section class="reviews-section">
+
+    <h2>
+      Local Reviews &amp; Community Notes
+    </h2>
+
+    <p class="reviews-intro">
+      Reviews, local observations, and community insights from around Ashburn and Northern Virginia.
+    </p>
+
+    <div id="reviews-list">
+      Loading reviews...
+    </div>
+
+  </section>
+
+</div><!-- ========================================
+       JAVASCRIPT
+       ======================================== -->
+
+  <script src="app.js"></script>
+
+  <script
+    async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALScvyWutJwWNQT1fC6KQQ1tbTFv4F4-s&callback=initMap&libraries=places">
+  </script>
+
+</body>
+
+</html>
