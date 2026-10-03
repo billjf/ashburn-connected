@@ -39,6 +39,9 @@ const breweryList =
 
 const coffeeList =
     document.getElementById("coffee-list");
+    
+ const evList =
+    document.getElementById("ev-list");   
 
 const restaurantList =
     document.getElementById("restaurant-list");
@@ -145,24 +148,28 @@ const restaurantButton =
     maxResultCount: 15
 };
 
-    const evRequest = {
-        fields: [
-            "displayName",
-            "formattedAddress",
-            "location"
-        ],
+ const evRequest = {
+    fields: [
+        "displayName",
+        "formattedAddress",
+        "location",
+        "rating",
+        "userRatingCount",
+        "regularOpeningHours",
+        "photos"
+    ],
 
-        locationRestriction: {
-            center: ashburn,
-            radius: 20000
-        },
+    locationRestriction: {
+        center: ashburn,
+        radius: 20000
+    },
 
-        includedPrimaryTypes: [
-            "electric_vehicle_charging_station"
-        ],
+    includedPrimaryTypes: [
+        "electric_vehicle_charging_station"
+    ],
 
-        maxResultCount: 20
-    };
+    maxResultCount: 20
+}; 
 
 
     const iadBeerRequest = {
@@ -1364,11 +1371,33 @@ restaurants.forEach(
     }
 );
 
+const sortedEVStations =
+    [...evStations].sort((a, b) => {
+
+        const distanceA =
+            calculateDistanceMiles(
+                ashburn.lat,
+                ashburn.lng,
+                a.location.lat(),
+                a.location.lng()
+            );
+
+        const distanceB =
+            calculateDistanceMiles(
+                ashburn.lat,
+                ashburn.lng,
+                b.location.lat(),
+                b.location.lng()
+            );
+
+        return distanceA - distanceB;
+    });
+
     // ========================================
     // EV CHARGING STATIONS
     // ========================================
 
-    evStations.forEach((station) => {
+    sortedEVStations.forEach((station, index) => {
         if (!station.location) {
             return;
         }
@@ -1398,7 +1427,93 @@ restaurants.forEach(
         evMarkers.push(
             evMarker
         );
+        
+        // ========================================
+       // EV CHARGER LISTING CARD
+       // ========================================
 
+       const distanceFromAshburn =
+        calculateDistanceMiles(
+        ashburn.lat,
+        ashburn.lng,
+        station.location.lat(),
+        station.location.lng()
+        );
+ 
+    const evPhotoUrl =
+    getPhotoUrl(station);
+
+const evCard =
+    document.createElement("div");
+
+evCard.className =
+    "brewery-card";
+
+evCard.innerHTML = `
+    ${
+        evPhotoUrl
+            ? `
+                <img
+                    src="${evPhotoUrl}"
+                    alt="${station.displayName}"
+                    class="brewery-photo"
+                >
+            `
+            : ""
+    }
+
+    <strong>
+    ${index + 1}. ${station.displayName}
+</strong>
+
+    <br>
+
+    ${
+        station.rating
+            ? `⭐ ${station.rating}
+               (${station.userRatingCount || 0} reviews)`
+            : "No rating available"
+    }
+
+    <br>
+
+    <small>
+        ⚡ EV Charging Station
+    </small>
+
+    <br>
+
+    <small>
+        📍 ${distanceFromAshburn.toFixed(1)}
+        miles from Ashburn
+    </small>
+
+    <br>
+
+    <small>
+        ${station.formattedAddress || ""}
+    </small>
+`;
+
+evCard.addEventListener(
+    "click",
+    () => {
+        google.maps.event.trigger(
+            evMarker,
+            "click"
+        );
+
+        map.panTo(
+            station.location
+        );
+
+        map.setZoom(14);
+    }
+);
+
+evList.appendChild(
+    evCard
+);   
 
         evMarker.addListener(
             "click",
@@ -1449,7 +1564,7 @@ restaurants.forEach(
         "none";
     
     restaurantList.style.display =
-    "none";  
+        "none";  
 
     sidebarTitle.textContent =
         "Top Breweries Near Ashburn";
@@ -1473,6 +1588,9 @@ restaurants.forEach(
             coffeeList.style.display =
                 "none";
 
+            evList.style.display = 
+                "none"   
+
             restaurantList.style.display =
                 "none";
 
@@ -1486,29 +1604,43 @@ restaurants.forEach(
     // EV FILTER
     // ========================================
 
-    evButton.addEventListener(
-        "click",
-        () => {
-            toggleMarkerGroup(
-                evMarkers,
-                evButton
+ evButton.addEventListener(
+    "click",
+    () => {
+        toggleMarkerGroup(
+            evMarkers,
+            evButton
+        );
+
+        breweryList.style.display =
+            "none";
+
+        coffeeList.style.display =
+            "none";
+
+        evList.style.display =
+            "block";
+
+        restaurantList.style.display =
+                "none";
+
+        sidebarTitle.textContent =
+            "EV Charging Stations Near Ashburn";
+
+        // Remove connection line
+        // when EV markers are hidden
+
+        if (
+            !evButton.classList
+                .contains("active") &&
+            connectionLine
+        ) {
+            connectionLine.setMap(
+                null
             );
-
-            // Remove connection line
-            // when EV markers are hidden
-
-            if (
-                !evButton.classList
-                    .contains("active") &&
-                connectionLine
-            ) {
-                connectionLine.setMap(
-                    null
-                );
-            }
         }
-    );
-
+    }
+);
 
     // ========================================
     // IAD BEER FILTER
@@ -1543,6 +1675,9 @@ restaurants.forEach(
 coffeeList.style.display =
     "block";
 
+evList.style.display =
+    "none";  
+
 restaurantList.style.display =
     "none";    
 
@@ -1570,6 +1705,9 @@ restaurantButton.addEventListener(
 
         coffeeList.style.display =
             "none";
+
+        evList.style.display =
+             "none";      
 
         restaurantList.style.display =
             "block";
